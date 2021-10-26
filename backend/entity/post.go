@@ -1,7 +1,7 @@
 package entity
 
 type Post struct {
-	PostID int8   `gorm:"primary_key;auto_increment" json:"id"`
+	PostID int    `gorm:"primary_key;auto_increment" json:"id"`
 	Konten string `gorm:"not null" json:"konten"`
 }
 

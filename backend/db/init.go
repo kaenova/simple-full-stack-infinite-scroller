@@ -31,9 +31,12 @@ func Init(tableDelete, dataInitialization bool) {
 
 	if tableDelete {
 		log.Info().Msg("menghapus tabel yang ada")
-		db.Exec(`DROP SCHEMA public CASCADE;
-		CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO root;
+		trx := db.Exec(`DROP SCHEMA public CASCADE;
+		CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO postgres;
 		GRANT ALL ON SCHEMA public TO public;`)
+		if trx.Error != nil {
+			errlogger.ErrFatalPanic(trx.Error)
+		}
 	}
 
 	Migration(db)

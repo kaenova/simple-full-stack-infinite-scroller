@@ -5,42 +5,22 @@ import (
 	"backend/entity"
 )
 
-func PostGetAll() (interface{}, error) {
+func PostGetPage(page int, pageSize int) (interface{}, error) {
 	var (
 		mulObj []entity.Post
 	)
 
 	db := db.GetDB()
-
-	result := db.Find(&mulObj).Limit(30)
+	offset := (page - 1) * pageSize
+	result := db.Offset(offset).Limit(pageSize).Find(&mulObj)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
 	if result.RowsAffected == 0 {
-		return "data kosong", nil
+		return nil, nil
 	}
 
 	return mulObj, nil
-}
-
-func PostSearchID(id string) (interface{}, error) {
-	var (
-		obj entity.Post
-	)
-
-	db := db.GetDB()
-
-	result := db.Where("post_id = ?", id).First(&obj)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	if result.RowsAffected == 0 {
-		return "data kosong", nil
-	}
-
-	return obj, nil
 }

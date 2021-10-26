@@ -8,9 +8,7 @@ import (
 
 func Post(e *echo.Echo) *echo.Echo {
 	e.GET("/post", controllers.GetPost)
-	// e.PUT("/routes1", ...)
-	// e.DELETE("/routes1", ...)
-	// e.POST("/tipe", controllers.PostTipeUser) //Creating Regular Account
+	// e.POST("/post", controllers.PostPost)
 
 	return e
 }
