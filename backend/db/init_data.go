@@ -1,7 +1,9 @@
 package db
 
 import (
-	"backend/utils/errlogger"
+	"backend/entity"
+	"encoding/csv"
+	"fmt"
 	"os"
 
 	"github.com/rs/zerolog/log"
@@ -16,9 +18,23 @@ func initData(db *gorm.DB) {
 	*/
 
 	// Kategori
-	data, err := os.ReadFile("db/dummy/post.sql")
-	errlogger.ErrFatalPanic(err)
-	db.Exec(string(data))
+	csvFile, err := os.Open("db/dummy/post.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
+	log.Info().Msg("Successfully read csv")
+	defer csvFile.Close()
+
+	csvLines, err := csv.NewReader(csvFile).ReadAll()
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, line := range csvLines {
+		emp := entity.Post{
+			Konten: line[0],
+		}
+		db.Create(&emp)
+	}
 
 	log.Info().Msg("dummy data terinisialisasi")
 }
